@@ -1,0 +1,167 @@
+﻿@model Models.AllVM
+@using System.Web.Configuration
+
+@{
+    ViewBag.Title = "專案設定";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.PrjInfo.PrjName (@Model.PrjInfo.PrjCode) @ViewBag.Title</h2>
+
+<form enctype="multipart/form-data" id="form1">
+
+<div class="form-horizontal">
+
+<hr />
+
+<div class="form-group">
+<div class="col-md-offset-0 col-md-10">
+                <table class="table">
+                <tr>
+                <td style="width:15%"></td>
+                <td style="width:35%"></td>
+                <td style="width:15%"></td>
+                <td style="width:35%"></td>
+                </tr>
+                <tr>
+                <th>說明文字</th><td><textarea id="PrjWelcome" name="PrjWelcome" style="max-width:300px; width:100%; height:100px">@Model.PrjInfo.PrjWelcome</textarea></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                </tr>
+                <tr><th>LOGO</th>
+                <td>
+                <input type="file" id="PrjLogo"  name="PrjLogo" accept=".png,.jpg,.gif" />
+                @{ 
+                    string Logo = WebConfigurationManager.AppSettings["Pic"].ToString() + Model.PrjInfo.PrjCode + "/" + Model.PrjInfo.PrjLogo;
+                    string Img = WebConfigurationManager.AppSettings["Img"].ToString() + "NoImage.jpg";
+                    if (!System.IO.File.Exists(Server.MapPath(Logo)))
+                    {
+                    <img src="@Img" style="width: 100px; height: 50px; margin-top: 5px" />
+                    }
+                    else
+                    {
+                    <img src="@Logo" style="width: 50px; margin-top: 5px" />
+                    }
+                }
+                </td>
+                <td colspan="2" style="text-align:left;">
+                圖片尺寸：250px * 100px<br />
+                圖片格式：png、jpg
+                </td>
+                </tr>
+                <tr><th>背景圖片</th>
+                <td>
+                <input type="file" id="PrjPic" name="PrjPic" accept=".png,.jpg,.gif" />
+                @{ 
+                    string bk = "../Pic/" + Model.PrjInfo.PrjCode + "/" + Model.PrjInfo.PrjPic;
+                    if (!System.IO.File.Exists(Server.MapPath(bk)))
+                    {
+                    <img src="@Img" style="width: 300px; height:200px; margin-top: 5px" />
+                    }
+                    else
+                    {
+                    <img src="@bk" style="width: 300px; margin-top: 5px" />
+                    }
+                }
+                </td>
+                <td colspan="2" style="text-align:left;">
+                圖片尺寸：1200px * 900px<br />
+                圖片格式：png、jpg
+                </td>
+                </tr>
+                <tr>
+                <th>橫幅顏色</th><td><input id="PrjBannerColor" name="PrjBannerColor" type="text" style="width:100px" value="@Model.PrjInfo.PrjBannerColor" /></td>
+                <th>條碼到期日</th><td><input id="Limited" name="Limited" type="text" style="width:100px" value="@Model.PrjInfo.Limited.ToString()" /> 格式：yyyy/mm/dd<br>若更新到期日，已經產生的戶號不會套用</td>
+                </tr>
+                <tr>
+                <th>字形顏色</th><td><input id="PrjFontColor" name="PrjFontColor" type="text" style="width:100px" value="@Model.PrjInfo.PrjFontColor" /></td>
+                <th>背景顏色</th><td><input id="PrjBgColor" name="PrjBgColor" type="text" style="width:100px" value="@Model.PrjInfo.PrjBgColor" /></td>
+                </tr>
+                <tr>
+                <th>按鈕字色</th><td><input id="PrjButFtColor" name="PrjButFtColor" type="text" style="width:100px" value="@Model.PrjInfo.PrjButFtColor" /></td>
+                <th>按鈕底色</th><td><input id="PrjButBgColor" name="PrjButBgColor" type="text" style="width:100px" value="@Model.PrjInfo.PrjButBgColor" /></td>
+                </tr>
+                </table>
+                <input type="hidden" id="PrjSNO" name="PrjSNO" value="@Model.PrjInfo.PrjSNO" />
+                <a class="btn btn-default" href="../Prj/List">返回</a>
+                <input id="aaa" type="button" value="儲存" class="btn btn-default" onclick="check_form();" />
+                <a class="btn btn-default" href="../Hou/Preview?PrjSNO=@Model.PrjInfo.PrjSNO" target="_blank">預覽</a> 
+<pre>
+備註： 1. 需先儲存後再預覽
+       2. 如更換檔案， 先儲存後再預覽
+</pre>
+</div>
+</div>
+</div>
+
+
+</form>
+@section scripts {
+<script>
+
+    function check_form() {
+        if (!dateValidationCheck($("#Limited").val())) {
+            alert("條碼到期日格式錯誤");
+            $("#Limited").focus();
+            return false;
+        } 
+        save();
+    }
+
+    function save() {
+        if (!confirm("確定儲存！存檔後原樣式及圖片會被換掉喔")) {
+            return false;
+        }
+        var formData = new FormData($('#form1')[0]);
+        $.ajax({
+            type: "post",
+            url: "../Prj/Edit",
+            data: formData,
+            contentType: false, //for 檔案上傳
+            cache: false,       //for 檔案上傳
+            processData: false, //for 檔案上傳
+            async: true,
+            success: function (response) {
+                alert(response.msg);
+                location.reload();
+            },
+            complete: function () {
+
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    }
+
+    function dateValidationCheck(str) {
+      let re = new RegExp("^([0-9]{4})[./]{1}([0-9]{1,2})[./]{1}([0-9]{1,2})$");
+      let strDataValue;
+      let infoValidation = true;
+      if ((strDataValue = re.exec(str)) != null) {
+        let i;
+        i = parseFloat(strDataValue[1]);
+        if (i <= 0 || i > 9999) {
+          infoValidation = false;
+        }
+        i = parseFloat(strDataValue[2]);
+        if (i <= 0 || i > 12) {
+          infoValidation = false;
+        }
+        i = parseFloat(strDataValue[3]);
+        if (i <= 0 || i > 31) {
+          infoValidation = false;
+        }
+      } else {
+        infoValidation = false;
+      }
+      //if (!infoValidation) {
+      //  alert("日期格式錯誤");
+      //}
+      return infoValidation;
+    }
+
+</script>
+}
+

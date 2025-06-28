@@ -1,0 +1,107 @@
+﻿@model Models.AllVM
+
+@{
+    ViewBag.Title = "新增戶號";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.PrjInfo.PrjName (@Model.PrjInfo.PrjCode) @ViewBag.Title</h2>
+
+<form id="form1">
+
+        <table class="table" style="width:100%">
+        <tr>
+        <th>輸入戶號</th>
+        </tr>
+        <tr>
+        <td>
+        <div>1. 請依照{戶號}{半型逗點}{密碼}的格式輸入，多戶號請換行，範例如下：</div>
+        <div>01A,A000000001</div>
+        <div>02A,A000000002</div>
+        <div>03A,A000000003</div>
+        <div>2. 輸入重覆戶號，後方會覆蓋前方戶號</div>
+        <div>3. 系統既存戶號，會更新密碼欄</div>
+        <div>4. 若需要修改戶號號碼，請刪除該戶號後再新增</div>
+        <div>
+        <textarea id="HouSNOs" name="HouSNOs" style="max-width:1000px; width:100%; height:300px"></textarea>
+        </div>
+        </td>
+        </tr>
+        </table>
+        <a class="btn btn-default" href="../Hou/List?PrjSNO=@Model.PrjInfo.PrjSNO">返回</a>
+        <input type="hidden" id="PrjSNO" name="PrjSNO" value="@Model.PrjInfo.PrjSNO" />
+        <input type="hidden" id="PrjCode" name="PrjCode" value="@Model.PrjInfo.PrjCode" />
+        <!--<input type="button" value="戶號整理" class="btn btn-default" onclick="return init_hou()" />-->
+        <input type="submit" value="儲存" class="btn btn-default" onclick="return check_form()" />
+        
+        <div id="dialog-message" title="將要新增的戶號"></div>
+</form>
+@section scripts {
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://jqueryui.com/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+<script>
+
+    function check_form() {
+        if ($("#HouSNOs").val() == "") {
+            alert("請輸入戶號");
+            return false;
+        }
+        //if (!confirm("您已經按過戶號整理了嗎？")) {
+        //    return false;
+        //}
+        save();
+    }
+
+    function save() {
+
+        var formData = new FormData($('#form1')[0]);
+        $.ajax({
+            type: "post",
+            url: "../Hou/Add",
+            data: formData,
+            dataType: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                alert(response.msg);
+                location.href = response.url;
+            },
+            complete: function () {
+
+            },
+            error: function () {
+                alert("請依照格式上傳喔");
+            }
+        });
+    }
+
+    function init_hou() {
+
+       var formData = new FormData($('#form1')[0]);
+        $.ajax({
+            type: "post",
+            url: "../Hou/AddPre",
+            data: formData,
+            dataType: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                alert("完成");
+                $("#HouSNOs").val(response.msg);
+
+            },
+            complete: function () {
+
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    }
+
+</script>
+}

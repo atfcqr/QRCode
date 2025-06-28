@@ -1,0 +1,42 @@
+﻿@model Models.AllVM
+@{
+    Layout = "~/Views/Shared/_Layout_01.cshtml";
+    ViewBag.Title = "建築履歷";
+
+}
+
+      
+<h2>建築履歷</h2>
+<p class="lead"><h3>@Html.Raw(Model.HouInfo.PrjWelcome.Replace("\n", "<br>"))</h3></p>
+<p class="lead"><h4>@Model.HouInfo.HouCode 住戶您好，請點選下方按鈕開啟附件</h4></p>
+
+        
+<p>
+    @{
+        foreach (var info in Model.AttProList)
+        {
+            string pdf = Server.MapPath("/Upload/" + Model.HouInfo.PrjCode + "/" + info.AttFileName);
+            string href = "";
+            if (System.IO.File.Exists(pdf))
+            {
+                href = "/Upload/" + Model.HouInfo.PrjCode + "/" + info.AttFileName;
+            }
+            <div>
+            <!--<a class="btn btn-primary btn-lg" href="../Pdfjs/Web/viewer.html?file=/Upload/@Model.HouInfo.PrjCode/@info.AttFileName" target="_blank" style="width: 330px; margin:0px 5px 5px 5px; text-align:left; color:@Model.HouInfo.PrjButFtColor; background-color:@Model.HouInfo.PrjButBgColor">-->
+            @if (href == "")
+            {
+                <div class="btn btn-primary btn-lg" style="width: 330px; margin:0px 5px 5px 5px; text-align:left; color:@Model.HouInfo.PrjButFtColor; background-color:#bbbbbb">
+                    @(info.AttTitle.Length >= 17 ? info.AttTitle.Substring(0, 17) : info.AttTitle)<br>@(info.AttNote.Length == 0 ? "" : "(" + info.AttNote + ")")
+                </div>
+            }
+            else
+            {
+                <a class="btn btn-primary btn-lg" href="@href" target="_blank" style="width: 330px; margin:0px 5px 5px 5px; text-align:left; color:@Model.HouInfo.PrjButFtColor; background-color:@Model.HouInfo.PrjButBgColor">
+                    @(info.AttTitle.Length >= 17 ? info.AttTitle.Substring(0, 17) : info.AttTitle)<br>@(info.AttNote.Length == 0 ? "" : "(" + info.AttNote + ")")
+                </a>
+            }
+            </div>
+        }
+    }
+</p>
+

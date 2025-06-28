@@ -1,0 +1,289 @@
+﻿@model Models.AllVM
+
+@{
+    ViewBag.Title = "列印條碼";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <style>
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #FAFAFA;
+        font: 12pt "Tahoma";
+    }
+    * {
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+    }
+        .page {
+            width: 210mm; /*隨著紙張大小異動*/
+            min-height: 297mm; /*隨著紙張大小異動*/
+            padding: 10mm 0mm 10mm 20mm;
+            margin: 10mm auto;
+            border: 1px #D3D3D3 solid;
+            border-radius: 5px;
+            background: white;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+    .subpage_ {
+        padding: 1cm;
+        border: 5px red solid;
+        height: 257mm;/*隨著紙張大小異動*/
+        outline: 2cm #FFEAEA solid;
+    }
+
+
+    @@page {
+        size: A4;
+        margin: 0;
+    }
+    @@media print {
+        html, body {
+            width: 210mm;/*隨著紙張大小異動*/
+            height: 297mm; /*隨著紙張大小異動*/
+        }
+        .page {
+            margin: 0;
+            border: initial;
+            border-radius: initial;
+            width: initial;
+            min-height: initial;
+            box-shadow: initial;
+            background: initial;
+            page-break-after: always;
+        }
+    }
+
+        .prjname {
+            position: relative;
+            top: 3mm;
+            text-align: center;
+        }
+
+        .img {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            top: 0mm;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .foot {
+            position: relative;
+            top: 5mm;
+            left: 5mm;
+        }
+
+        .rankbase {
+            margin: 0 auto;
+            height: 90mm;
+            width: 54mm;
+            inline: 2cm #FFEAEA solid;
+            float: left;
+            border: 1px #D3D3D3 solid;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .rank01 {
+        }
+        .rank02 {
+            margin-left: 3mm;
+        }
+        .rank03 {
+            margin-left: 3mm;
+        }
+        .rank04 {
+            margin-top: 3mm;
+        }
+        .rank05 {
+            margin-top: 3mm;
+            margin-left: 3mm;
+        }
+        .rank06 {
+            margin-top: 3mm;
+            margin-left: 3mm;
+        }
+        .rank07 {
+            margin-top: 3mm;
+        }
+        .rank08 {
+            margin-top: 3mm;
+            margin-left: 3mm;
+        }
+        .rank09 {
+            margin-top: 3mm;
+            margin-left: 3mm;
+        }
+    </style>
+</head>
+<body>
+<div class="book" id="app">
+
+
+    @{  
+        int i = 1;
+        int j = 1;
+        string aaa = "<div class='page'><div class='subpage'>";
+        string bbb = "</div></div>";
+        string ccc = "";
+        foreach (var info in Model.HouList)
+        {
+
+            string QRC = "../Pic/" + Model.PrjInfo.PrjCode + "/" + info.QRCode;
+            string Img = "../Img/NoImage.jpg";
+
+            if (j == 1) //正面
+            {
+                if (i % 9 == 1)
+                {
+                    @Html.Raw(aaa)
+                }
+
+                if (i % 9 == 1)
+                {
+                    ccc = "rankbase rank01";
+                }
+                else if (i % 9 == 2)
+                {
+                    ccc = "rankbase rank02";  
+                }
+                else if (i % 9 == 3)
+                {
+                    ccc = "rankbase rank03"; 
+                }
+                else if (i % 9 == 4)
+                {
+                    ccc = "rankbase rank04";  
+                }
+                else if (i % 9 == 5)
+                {
+                    ccc = "rankbase rank05";  
+                }
+                else if (i % 9 == 6)
+                {
+                    ccc = "rankbase rank06";  
+                }
+                else if (i % 9 == 7)
+                {
+                    ccc = "rankbase rank07";  
+                }
+                else if (i % 9 == 8)
+                {
+                    ccc = "rankbase rank08";  
+                }
+                else if (i % 9 == 0)
+                {
+                    ccc = "rankbase rank09";  
+                }
+
+                <div class="@ccc">
+                <span class="prjname"><h1>@info.PrjName</h1></span>
+                @if (!System.IO.File.Exists(Server.MapPath(QRC)))
+                {
+                <img src="@Img" class="img" />
+                }
+                else
+                {
+                <img src="@QRC" class="img"  />
+                }
+                <div class="foot">
+                戶號：@info.HouCode<br />
+                <!--密碼：@info.HouPWD<br />-->
+                <!--到期日：@info.Limited-->
+                </div>
+                </div>
+            
+                if (i % 9 == 0)
+                {
+                   @Html.Raw(bbb)
+                }
+                i++;
+
+                j++;
+            }
+
+
+            if (j == 2) //反面
+            {
+                if (i % 9 == 1)
+                {
+                    @Html.Raw(aaa)
+                }
+
+                if (i % 9 == 1)
+                {
+                    ccc = "rankbase rank01";
+                }
+                else if (i % 9 == 2)
+                {
+                    ccc = "rankbase rank02";  
+                }
+                else if (i % 9 == 3)
+                {
+                    ccc = "rankbase rank03"; 
+                }
+                else if (i % 9 == 4)
+                {
+                    ccc = "rankbase rank04";  
+                }
+                else if (i % 9 == 5)
+                {
+                    ccc = "rankbase rank05";  
+                }
+                else if (i % 9 == 6)
+                {
+                    ccc = "rankbase rank06";  
+                }
+                else if (i % 9 == 7)
+                {
+                    ccc = "rankbase rank07";  
+                }
+                else if (i % 9 == 8)
+                {
+                    ccc = "rankbase rank08";  
+                }
+                else if (i % 9 == 0)
+                {
+                    ccc = "rankbase rank09";  
+                }
+
+                <div class="@ccc">
+                <div class="foot" style="margin-top: 210px">
+                戶號：@info.HouCode<br />
+                <!--密碼：@info.HouPWD<br />-->
+                到期日：@info.Limited
+                </div>
+                </div>
+            
+                if (i % 9 == 0)
+                {
+                   @Html.Raw(bbb)
+                }
+                i++;
+
+                j--;
+            }
+
+
+
+
+
+        }
+    }
+
+          
+
+
+</div>
+
+</body>
+</html>

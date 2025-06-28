@@ -1,0 +1,237 @@
+﻿@model  Models.AllVM
+@using System.Web.Configuration
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+    <h2>戶號管理</h2>
+
+    <div style="margin: 5px 5px 5px 5px; float:left">
+    專案：
+    <select class="" id="qry_PrjSNO" name="" style="width: 200px; height: 30px" onchange="ccc(this)">
+    <option value="">請選擇</option>
+    @{ 
+        foreach (Models.SelectInfo info in Model.PrjOption)
+        {
+            var selected = (info.val == Model.PrjInfo.PrjSNO.ToString() ? "selected" : "");
+            <option value="@info.val" @selected>@info.txt (@info.cod)</option>
+        }
+    }
+    </select>
+    </div>
+    <div style="margin: 5px 5px 5px 5px; float:left">
+    <input type="hidden" id="PrjSNO" name="PrjSNO" value="@Model.PrjInfo.PrjSNO" />
+    <input type="hidden" id="PrjCode" name="PrjCode" value="@Model.PrjInfo.PrjCode" />
+    <a class="btn btn-default" href="../Prj/List">返回</a>
+    @if (Session["Role"].ToString() == "1" || Session["Role"].ToString() == "2")
+    {
+        string dis = (Model.PrjInfo.PrjSNO == 0 ? "disabled" : "");
+        string ret = (Model.PrjInfo.PrjSNO == 0 ? "javascript:return false;" : "javascript:;");
+        <a class="btn btn-default" href="../Hou/Add?PrjSNO=@Model.PrjInfo.PrjSNO" onclick="@ret" @dis>戶號新增</a>
+        <a class="btn btn-default" href="../Hou/PrintQR?PrjSNO=@Model.PrjInfo.PrjSNO" onclick="@ret" @dis target="_blank">列印條碼</a>
+    }
+    @if (Session["Role"].ToString() == "1" || Session["Role"].ToString() == "3")
+    {
+        string dis = (Model.PrjInfo.PrjSNO == 0 ? "disabled" : "");
+        string ret = (Model.PrjInfo.PrjSNO == 0 ? "javascript:return false;" : "javascript:;");
+        <a class="btn btn-default" href="../Att/Manual?PrjSNO=@Model.PrjInfo.PrjSNO" onclick="@ret" @dis>交屋手冊上傳</a>
+        <a class="btn btn-default" href="../Att/Batch?PrjSNO=@Model.PrjInfo.PrjSNO" onclick="@ret" @dis>整批檔案上傳</a>
+    }
+    </div>
+
+    <table class="table"> 
+
+    <tr>
+    <th>序號</th>
+    <!--<th>專案名稱</th>-->
+    <!--<th>專案代號</th>-->
+    <th>戶號</th>
+    <th>密碼</th>
+    <th>條碼到期日</th>
+    <th>QRCode</th>
+    <th>已上傳檔案數</th>
+    <th>執行</th>
+    </tr>
+
+   @{ 
+
+       int i = 1;
+       foreach (var info in Model.HouList)
+       {
+       <tr>
+       <td>@(i++)</td>
+       <!--<td>@info.PrjName</td>-->
+       <!--<td>@info.PrjCode</td>-->
+       <td>@info.HouCode</td>
+       <td>
+        @{string HouCodePWD = info.HouCode + "PWD";}
+        @if (Session["Role"].ToString() == "1" || Session["Role"].ToString() == "2" || Session["Role"].ToString() == "4")
+        {
+            <input type="text" id="@HouCodePWD" name="@HouCodePWD" value="@info.HouPWD" onblur="pwd(this, @info.HouSNO, '@info.HouPWD')" style="width:100px"  />
+        }
+        else
+        {
+            @info.HouPWD
+        }
+        </td>
+       <td>
+         @{string HouCodeLim = info.HouCode + "Lim";}
+        @if (Session["Role"].ToString() == "1" || Session["Role"].ToString() == "2" || Session["Role"].ToString() == "4")
+        {
+            <input type="text" id="@HouCodeLim" name="@HouCodeLim" value="@info.Limited" onblur="limited(this, @info.HouSNO, '@info.Limited')" style="width:100px"  />
+        }
+        else
+        {
+            @info.Limited
+        }
+        </td>
+       <td>
+       
+        @{ 
+            string QRC = WebConfigurationManager.AppSettings["Pic"].ToString() + Model.PrjInfo.PrjCode + "/" + info.QRCode;
+            string Img = WebConfigurationManager.AppSettings["Img"].ToString() + "NoImage.jpg";
+            if (!System.IO.File.Exists(Server.MapPath(QRC)))
+            {
+            <img src="@Img" style="width:100px; height:100px" />
+            }
+            else
+            {
+            <a href="@QRC" target="_blank"><img src="@QRC" style="width:100px" /></a>
+            }
+        }
+
+       </td>
+       <td>@info.AttCount</td>
+       <td>
+        @if (Session["Role"].ToString() == "1" || Session["Role"].ToString() == "3")
+        {
+        <div style="margin-top: 5px"><a class="btn btn-default" href="../Att/Upload?PrjSNO=@info.PrjSNO&HouSNO=@info.HouSNO" style="width:110px">戶號檔案上傳</a></div>
+        }
+        <div style="margin-top: 5px"><a class="btn btn-default" href="../Hou/Preview?PrjSNO=@info.PrjSNO&HouSNO=@info.HouSNO" target="_blank" style="width:110px">戶號預覽</a></div>
+        @if (Session["Role"].ToString() == "1" || Session["Role"].ToString() == "2")
+        {
+        <div style="margin-top: 5px"><a class="btn btn-default" href="javascript:;" onclick="if (confirm('確定刪除？')) { del('@info.PrjSNO', '@info.PrjCode', '@info.HouSNO'); }" style="width:110px">戶號刪除</a></div>
+        }
+       </td>
+       </tr>
+           }
+
+
+       }
+   </table>
+
+
+    <script>
+
+        function ccc(obj) {
+
+            location.href = "../Hou/List?PrjSNO=" + obj.value;
+        }
+
+        function del(PrjSNO, PrjCode, HouSNO) {
+
+            $.ajax({
+                type: "get",
+                url: "../Hou/Del",
+                data: "PrjSNO=" + PrjSNO + "&PrjCode=" + PrjCode + "&HouSNO=" + HouSNO,
+                dataType: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    alert(response.msg);
+                    location.reload();
+                },
+                complete: function () {
+
+                },
+                error: function () {
+                    alert("error");
+                }
+            });
+        }
+
+        function pwd(obj, HouSNO, old) {
+
+            $.ajax({
+                type: "get",
+                url: "../Hou/BlurPWD",
+                data: "id=" + obj.id + "&HouPWD=" + obj.value + "&HouSNO=" + HouSNO,
+                dataType: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    $("#" + obj.id).val(response.msg);
+                    //if (obj.value != old) {
+                    //    alert("已修改");
+                    //}
+                },
+                complete: function () {
+
+                },
+                error: function () {
+                    alert("error");
+                }
+            });
+        }
+
+        function limited(obj, HouSNO, old) {
+
+            if (!dateValidationCheck(obj.value)) {
+                alert("條碼到期日格式錯誤");
+                $("#" + obj.id).css("background-color", "yellow");
+                return false;
+            }
+            else {
+                $("#" + obj.id).css("background-color", "white");
+            }
+        
+            $.ajax({
+                type: "get",
+                url: "../Hou/BlurLimited",
+                data: "id=" + obj.id + "&Limited=" + obj.value + "&HouSNO=" + HouSNO,
+                dataType: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    $("#" + obj.id).val(response.msg);
+                    //if (obj.value != old) {
+                    //    alert("已修改");
+                    //}
+                },
+                complete: function () {
+
+                },
+                error: function () {
+                    alert("error");
+                }
+            });
+        }
+
+        function dateValidationCheck(str) {
+          let re = new RegExp("^([0-9]{4})[./]{1}([0-9]{1,2})[./]{1}([0-9]{1,2})$");
+          let strDataValue;
+          let infoValidation = true;
+          if ((strDataValue = re.exec(str)) != null) {
+            let i;
+            i = parseFloat(strDataValue[1]);
+            if (i <= 0 || i > 9999) {
+              infoValidation = false;
+            }
+            i = parseFloat(strDataValue[2]);
+            if (i <= 0 || i > 12) {
+              infoValidation = false;
+            }
+            i = parseFloat(strDataValue[3]);
+            if (i <= 0 || i > 31) {
+              infoValidation = false;
+            }
+          } else {
+            infoValidation = false;
+          }
+          //if (!infoValidation) {
+          //  alert("日期格式錯誤");
+          //}
+          return infoValidation;
+        }
+    </script>

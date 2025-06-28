@@ -1,0 +1,196 @@
+﻿@model  Models.AllVM
+@{
+    ViewBag.Title = "各戶檔案上傳";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form enctype="multipart/form-data" id="form1" action="../Att/Upload" method="post">
+    <h2>@Model.PrjInfo.PrjName (@Model.PrjInfo.PrjCode) @ViewBag.Title</h2>
+    <div>1. 所有檔案會重新命名，格式：專案代號_戶號_標題文字.pdf</div>
+    <!--<div>2. 所有檔案總合上傳限制30M</div>-->
+    <table class="table"> 
+    <tr>
+    <th>序號</th>
+    <th>標題</th>
+    <th>檔案上傳</th>
+    <th>備註</th>
+    </tr>
+    @{ 
+        var cnt = Model.AttProList.Where(x => x.AttSort == 1).Count();
+        var info = new Models.AttPro();
+        var AttTitle = "";
+
+        if (cnt > 0)
+        {
+            info = Model.AttProList.Where(x => x.AttSort == 1).FirstOrDefault();
+        }
+        else
+        {
+            info = new Models.AttPro();
+        }
+        AttTitle = Model.AttTitles.Where(x => x.Code == "a").FirstOrDefault().Text;
+    }
+    <tr>
+    <td>1<input type="hidden" id="AttSNO01" name="AttSNO01" value="@info.AttSNO" /></td>
+    <td>@AttTitle<input type="hidden" id="AttTitle01" name="AttTitle01" value="@AttTitle" /></td>
+    <td>
+        <div><a href="../upload/@Model.PrjInfo.PrjCode/@info.AttFileName" target="_blank">@info.AttFileName</a></div>
+        <div>此為共用文件，欲編輯請至戶號管理，按下交屋手冊上傳鈕</div>
+    </td>
+    <td>@info.AttNote</td>
+    </tr>
+    @{ 
+        cnt = Model.AttProList.Where(x => x.AttSort == 2).Count();
+        if (cnt > 0)
+        {
+            info = Model.AttProList.Where(x => x.AttSort == 2).FirstOrDefault();
+        }
+        else
+        {
+            info = new Models.AttPro();
+        }
+        AttTitle = Model.AttTitles.Where(x => x.Code == "b").FirstOrDefault().Text;
+    }
+    <tr>
+    <td>2<input type="hidden" id="AttSNO02" name="AttSNO02" value="@info.AttSNO" /></td>
+    <td>@AttTitle<input type="hidden" id="AttTitle02" name="AttTitle02" value="@AttTitle" /></td>
+    <td>
+        <div><a href="../upload/@Model.PrjInfo.PrjCode/@info.AttFileName" target="_blank">@info.AttFileName</a></div>
+        <div><input type="file" id="Att02" name="Att02" accept=".pdf" /></div>
+    </td>
+    <td><input type="text" id="AttNote02" name="AttNote02" style="width:500px" value="@info.AttNote" /></td>
+    </tr>
+    @{ 
+        cnt = Model.AttProList.Where(x => x.AttSort == 3).Count();
+        if (cnt > 0)
+        {
+            info = Model.AttProList.Where(x => x.AttSort == 3).FirstOrDefault();
+        }
+        else
+        {
+            info = new Models.AttPro();
+        }
+        AttTitle = Model.AttTitles.Where(x => x.Code == "c").FirstOrDefault().Text;
+    }
+    <tr>
+    <td>3<input type="hidden" id="AttSNO03" name="AttSNO03" value="@info.AttSNO" /></td>
+    <td>@AttTitle<input type="hidden" id="AttTitle03" name="AttTitle03" value="@AttTitle" /></td>
+    <td><a href="../upload/@Model.PrjInfo.PrjCode/@info.AttFileName" target="_blank">@info.AttFileName</a><br/><input type="file" id="Att03" name="Att03" accept=".pdf" /></td>
+    <td><input type="text" id="AttNote03" name="AttNote03" style="width:500px" value="@info.AttNote" /></td>
+    </tr>
+    @{ 
+        cnt = Model.AttProList.Where(x => x.AttSort == 4).Count();
+        if (cnt > 0)
+        {
+            info = Model.AttProList.Where(x => x.AttSort == 4).FirstOrDefault();
+        }
+        else
+        {
+            info = new Models.AttPro();
+        }
+        AttTitle = Model.AttTitles.Where(x => x.Code == "d").FirstOrDefault().Text;
+    }
+    <tr>
+    <td>4<input type="hidden" id="AttSNO04" name="AttSNO04" value="@info.AttSNO" /></td>
+    <td>@AttTitle<input type="hidden" id="AttTitle04" name="AttTitle04" value="@AttTitle" /></td>
+    <td><a href="../upload/@Model.PrjInfo.PrjCode/@info.AttFileName" target="_blank">@info.AttFileName</a><br/><input type="file" id="Att04" name="Att04" accept=".pdf" /></td>
+    <td><input type="text" id="AttNote04" name="AttNote04" style="width:500px" value="@info.AttNote" /></td>
+    </tr>
+    @{ 
+        cnt = Model.AttProList.Where(x => x.AttSort == 5).Count();
+        if (cnt > 0)
+        {
+            info = Model.AttProList.Where(x => x.AttSort == 5).FirstOrDefault();
+        }
+        else
+        {
+            info = new Models.AttPro();
+        }
+        AttTitle = Model.AttTitles.Where(x => x.Code == "e").FirstOrDefault().Text;
+    }
+    <tr>
+    <td>5<input type="hidden" id="AttSNO05" name="AttSNO05" value="@info.AttSNO" /></td>
+    <td>@AttTitle<input type="hidden" id="AttTitle05" name="AttTitle05" value="@AttTitle" /></td>
+    <td><a href="../upload/@Model.PrjInfo.PrjCode/@info.AttFileName" target="_blank">@info.AttFileName</a><br/><input type="file" id="Att05" name="Att05" accept=".pdf" /></td>
+    <td><input type="text" id="AttNote05" name="AttNote05" style="width:500px" value="@info.AttNote" /></td>
+    </tr>
+    @{ 
+        cnt = Model.AttProList.Where(x => x.AttSort == 6).Count();
+        if (cnt > 0)
+        {
+            info = Model.AttProList.Where(x => x.AttSort == 6).FirstOrDefault();
+        }
+        else
+        {
+            info = new Models.AttPro();
+        }
+        AttTitle = Model.AttTitles.Where(x => x.Code == "f").FirstOrDefault().Text;
+    }
+    <tr>
+    <td>6<input type="hidden" id="AttSNO06" name="AttSNO06" value="@info.AttSNO" /></td>
+    <td>@AttTitle<input type="hidden" id="AttTitle06" name="AttTitle06" value="@AttTitle" /></td>
+    <td><a href="../upload/@Model.PrjInfo.PrjCode/@info.AttFileName" target="_blank">@info.AttFileName</a><br/><input type="file" id="Att06" name="Att06" accept=".pdf" /></td>
+    <td><input type="text" id="AttNote06" name="AttNote06" style="width:500px" value="@info.AttNote" /></td>
+    </tr>
+    @{ 
+        cnt = Model.AttProList.Where(x => x.AttSort == 7).Count();
+        if (cnt > 0)
+        {
+            info = Model.AttProList.Where(x => x.AttSort == 7).FirstOrDefault();
+        }
+        else
+        {
+            info = new Models.AttPro();
+        }
+        AttTitle = Model.AttTitles.Where(x => x.Code == "g").FirstOrDefault().Text;
+    }
+    <tr>
+    <td>7<input type="hidden" id="AttSNO07" name="AttSNO07" value="@info.AttSNO" /></td>
+    <td>@AttTitle<input type="hidden" id="AttTitle07" name="AttTitle07" value="@AttTitle" /></td>
+    <td><a href="../upload/@Model.PrjInfo.PrjCode/@info.AttFileName" target="_blank">@info.AttFileName</a><br/><input type="file" id="Att07" name="Att07" accept=".pdf" /></td>
+    <td><input type="text" id="AttNote07" name="AttNote07" style="width:500px" value="@info.AttNote" /></td>
+    </tr>
+   </table>
+    <input type="hidden" id="PrjSNO" name="PrjSNO" value="@Model.PrjInfo.PrjSNO" />
+    <input type="hidden" id="HouSNO" name="HouSNO" value="@Model.HouInfo.HouSNO" />
+    <input type="hidden" id="PrjCode" name="PrjCode" value="@Model.PrjInfo.PrjCode" />
+    <input type="hidden" id="HouCode" name="HouCode" value="@Model.HouInfo.HouCode" />
+    <a class="btn btn-default" href="../Hou/List?PrjSNO=@ViewBag.qy_PrjSNO">返回</a>
+    <input type="submit" value="儲存" class="btn btn-default" />
+</form>
+
+@section scripts {
+<script>
+
+    function check_form() {
+        document.forms[0].submit();
+        //save();
+    }
+
+    function save() {
+        
+
+        var formData = new FormData($('#form1')[0]);
+        $.ajax({
+            type: "post",
+            url: "../Att/Upload",
+            data: formData,
+            contentType: false, //for 檔案上傳
+            cache: false,       //for 檔案上傳
+            processData: false, //for 檔案上傳
+            async: true,
+            success: function (response) {
+                alert(response.msg);
+                //location.reload();
+            },
+            complete: function () {
+
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    }
+
+</script>
+}

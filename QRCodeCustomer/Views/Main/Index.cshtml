@@ -1,0 +1,65 @@
+﻿@model Models.AllVM
+@{
+    Layout = "~/Views/Shared/_Layout_01.cshtml";
+    ViewBag.Title = "建築履歷";
+
+}
+
+
+<form id="form1">
+<h2>大陸建設-建築履歷</h2>
+@if (ViewBag.ErrMsg == "")
+{ 
+    <p class="lead"><h3>@Html.Raw(Model.HouInfo.PrjWelcome.Replace("\n", "<br>"))</h3></p>
+    <p class="lead"><h4>@Model.HouInfo.HouCode 住戶您好！</h4></p>
+    <p class="lead"><h4>請輸入您的密碼，可忽略大小寫：</h4></p>
+    <p class="lead"><input type="text" id="pwd" name="pwd" class="input-lg" style="color:#000000" /></p>
+    <p class="lead"><a class="btn btn-default" href="javascript:;" onclick="check_form()">送出</a></p>
+    <input type="hidden" id="hou" name="hou" value="@Model.HouInfo.HouCode" />
+    <input type="hidden" id="tkn" name="tkn" value="@Model.HouInfo.Token" />
+}
+else
+{
+    <p class="lead"><div  style="background-color: #ff0000; color: white; padding:10px 10px 10px 10px"><h3>@ViewBag.ErrMsg</h3></div></p>
+}
+</form>
+
+
+
+@section scripts {
+
+<script>
+
+    function check_form() {
+        save();
+
+    }
+
+
+    function save() {
+
+        var formData = new FormData($('#form1')[0]);
+        $.ajax({
+            type: "post",
+            url: "../Main/PWD",
+            data: formData,
+            dataType: false,
+            contentType: false, //"application/x-www-form-urlencoded; charset=UTF-8;",
+            processData: false,
+            success: function (response) {
+                alert(response.msg);
+                if (response.url != "undefined")
+                    location.href = response.url;
+            },
+            complete: function () {
+
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    }
+
+
+</script>
+}

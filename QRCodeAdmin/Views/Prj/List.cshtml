@@ -1,0 +1,69 @@
+﻿@model  Models.AllVM
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div style="margin: 5px 5px 5px 5px; float:left">
+    <h2>專案管理</h2>
+    </div>
+    <div style="margin: 25px 5px 5px 15px; float:left">
+    @if (Session["Role"].ToString() == "1" || Session["Role"].ToString() == "2")
+    { 
+    <a class="btn btn-default" href="../Prj/Add">專案新增</a>
+    }
+    </div>
+     
+    <table class="table"> 
+
+    <tr>
+    <th>No.</th>
+    <th>專案代號</th>
+    <th>專案名稱</th>
+    <th>執行</th>
+    </tr>
+
+
+        @foreach (var info in Model.PrjList)
+        {
+        <tr>
+        <td>@info.PrjSNO</td>
+        <td>@info.PrjCode</td>
+        <td>@info.PrjName</td>
+        <td>
+        @if (Session["Role"].ToString() == "1" || Session["Role"].ToString() == "2")
+        {
+        <a class="btn btn-default" href="javascript:;" onclick="if (confirm('確定刪除？')) { del('@info.PrjSNO'); }">專案刪除</a>
+        <a class="btn btn-default" href="../Prj/Edit?PrjSNO=@info.PrjSNO">專案設定</a>
+        <a class="btn btn-default" href="../Hou/List?PrjSNO=@info.PrjSNO">戶號管理</a>
+        }
+        </td>
+        </tr>
+        }
+
+   </table>
+
+@section scripts {
+<script>
+        function del(PrjSNO) {
+
+            $.ajax({
+                type: "get",
+                url: "../Prj/Del",
+                data: "PrjSNO=" + PrjSNO,
+                dataType: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    alert(response.msg);
+                    location.reload();
+                },
+                complete: function () {
+
+                },
+                error: function () {
+                    alert("error");
+                }
+            });
+        }
+</script>
+}

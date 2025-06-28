@@ -1,0 +1,96 @@
+﻿@model  Models.AllVM
+@{
+    ViewBag.Title = "使用者管理";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form id="form1">
+<h2>@ViewBag.Title</h2>
+<div class="form-horizontal">
+<hr />			
+<div class="form-group">
+<div class="col-md-offset-0 col-md-10">
+            <table class="table">
+            <tr style="background-color:#eeeeee">
+            <td style="width:15%"></td>
+            <td style="width:35%"></td>
+            <td style="width:15%"></td>
+            <td style="width:35%"></td>
+            </tr>
+            <tr>
+            <th>姓名</th><td><input type="text" id="Name" name="Name" value="@Model.UsersProInfo.Name" style="width: 300px" /></td>
+            <th>工號</th><td><input type="text" id="GID" name="GID" value="@Model.UsersProInfo.GID" /></td>
+            </tr>
+            <tr>
+            <th>單位</th><td><input type="text" id="UnitCode" name="UnitCode" value="@Model.UsersProInfo.UnitCode" style="width: 300px" /></td>
+            <th>角色</th>
+            <td>
+            <select id="Roles" name="Roles" class="dropdown" style="width: 180px">
+            @{ 
+                foreach (Models.SelectInfo info in Model.RolesOption)
+                {
+                    var selected = (info.val == Model.UsersProInfo.Roles ? "selected" : "");
+                    <option value="@info.val" @selected>@info.txt</option>
+                }
+            }
+            </select>
+            </td>
+            </tr>
+            <tr>
+            <th>Email</th><td><input type="text" id="Email" name="Email" value="@Model.UsersProInfo.Email" style="width: 300px" /></td>
+            <th>啟用/停用</th>
+            <td>
+            @{ 
+                string EnabledChecked1 = (Model.UsersProInfo.Enabled == null || Model.UsersProInfo.Enabled == 1 ? "checked" : "");
+                string EnabledChecked0 = (Model.UsersProInfo.Enabled == 0 ? "checked" : "");
+            }
+            <input type="radio" id="Enabled" name="Enabled" value="1"  class="radio-inline" @EnabledChecked1 />啟用
+            <input type="radio" id="Enabled" name="Enabled" value="0"  class="radio-inline" @EnabledChecked0 />停用
+            </td>
+            </tr>
+            </table>
+            <input type="hidden" id="SNO" name="SNO" value="@Model.UsersProInfo.SNO" />
+            <a class="btn btn-default" href="../Users/List">返回</a>
+            <input id="aaa" type="button" value="儲存" class="btn btn-default" onclick="check_form();" />
+</div>
+</div>
+</div>
+
+
+</form>
+
+@section scripts {
+
+<script>
+
+    function check_form() {
+        save();
+    }
+
+    function save() {
+
+        var formData = new FormData($('#form1')[0]);
+        $.ajax({
+            type: "post",
+            url: "../Users/Edit",
+            data: formData,
+            dataType: false,
+            contentType: false,
+            processData: false,
+            async: true,
+            success: function (response) {
+                alert(response.msg);
+                location.href = response.url;
+            },
+            complete: function () {
+
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    }
+
+</script>
+
+}

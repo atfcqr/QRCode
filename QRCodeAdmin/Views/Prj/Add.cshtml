@@ -1,0 +1,87 @@
+﻿@model Models.AllVM
+@using System.Web.Configuration
+
+@{
+    ViewBag.Title = "新增專案";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<form enctype="multipart/form-data" id="form1">
+
+<div class="form-horizontal">
+
+<hr />
+
+<div class="form-group">
+<div class="col-md-offset-0 col-md-10">
+                <table class="table">
+                <tr>
+                <td style="width:15%"></td>
+                <td style="width:35%"></td>
+                <td style="width:15%"></td>
+                <td style="width:35%"></td>
+                </tr>
+                <tr>
+                <th>專案代號</th><td><input type="text" id="PrjCode" name="PrjCode" /></td>
+                <tr>
+                </tr>
+                <th>專案名稱</th><td><input type="text" id="PrjName" name="PrjName" /></td>
+                </tr>
+                </table>
+                <a class="btn btn-default" href="../Prj/List">返回</a>
+                <input id="aaa" type="button" value="儲存" class="btn btn-default" onclick="return check_form();" />
+</div>
+</div>
+</div>
+
+
+</form>
+@section scripts {
+<script>
+
+    function check_form() {
+
+        if ($("#PrjCode").val() == "") {
+            alert("請填寫專案代號");
+            $("#PrjCode").focus();
+            return false;
+        }
+
+        if ($("#PrjName").val() == "") {
+            alert("請填寫專案名稱");
+            $("#PrjName").focus();
+            return false;
+        }
+
+        save();
+    }
+
+    function save() {
+
+        var formData = new FormData($('#form1')[0]);
+        $.ajax({
+            type: "post",
+            url: "../Prj/Add",
+            data: formData,
+            contentType: false, //for 檔案上傳
+            cache: false,       //for 檔案上傳
+            processData: false, //for 檔案上傳
+            async: true,
+            success: function (response) {
+                alert(response.msg);
+                location.href = response.url;
+            },
+            complete: function () {
+
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    }
+
+</script>
+}
+

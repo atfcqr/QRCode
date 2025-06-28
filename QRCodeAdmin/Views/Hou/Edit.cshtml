@@ -1,0 +1,35 @@
+﻿@model Models.AllVM
+
+@{
+    ViewBag.Title = "專案設定";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<form enctype="multipart/form-data">
+    <div class="form-horizontal">
+
+        <hr />
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <table class="table">
+                <tr><th>專案代號</th><td>@Model.PrjInfo.PrjCode</td></tr>
+                <tr><th>專案名稱</th><td>@Model.PrjInfo.PrjName</td></tr>
+                <tr><th>背景圖片</th>
+                <td>
+                
+                <input type="file" name="PrjPic" accept=".png,.jpg,.gif" />
+                <img src="../Pic/@Model.PrjInfo.PrjPic" style="width: 200px" />
+                </td>
+                
+                </tr>
+
+                </table>
+                <a class="btn btn-default" href="../Prj/List">返回</a>
+                <input type="submit" value="儲存" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>

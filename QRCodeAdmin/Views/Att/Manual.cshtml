@@ -1,0 +1,69 @@
+﻿@model  Models.AllVM
+@{
+    ViewBag.Title = "交屋手冊上傳";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form enctype="multipart/form-data" id="form1">
+    <h2>@Model.PrjInfo.PrjName (@Model.PrjInfo.PrjCode) @ViewBag.Title</h2>
+    1. 每個專案共用一份交屋手冊<br />
+    <!--2. 每個檔案上傳限制30M-->
+    <table class="table"> 
+    <tr>
+    <th style="width:5%">序號</th>
+    <th style="width:60%">標題</th>
+    <th style="width:35%">檔案上傳</th>
+    <th style="width:35%">備註</th>
+    </tr>
+    <tr>
+    <td>1<input type="hidden" id="AttSNO" name="AttSNO" value="@Model.AttProInfo.AttSNO" /></td>
+    <td>@Model.SysCodeInfo.Text<input type="hidden" id="AttTitle" name="AttTitle" value="@Model.SysCodeInfo.Text" /></td>
+    <td>
+        <div><input type="file" id="Att01" name="Att01" accept=".pdf" /></div>
+        <div><a href="../Upload/@Model.PrjInfo.PrjCode/@Model.AttProInfo.AttFileName" target="_blank">@Model.AttProInfo.AttFileName</a></div>
+    </td>
+    <td><input type="text" id="AttNote" name="AttNote" style="width:500px" value="@Model.AttProInfo.AttNote" /></td>
+    </tr>
+    </table>
+    <input type="hidden" id="PrjSNO" name="PrjSNO" value="@Model.PrjInfo.PrjSNO" />
+    <input type="hidden" id="PrjCode" name="PrjCode" value="@Model.PrjInfo.PrjCode" />
+    <input type="hidden" id="SysText" name="SysText" value="@Model.SysCodeInfo.Text" />
+
+    <a class="btn btn-default" href="../Hou/List?PrjSNO=@Model.PrjInfo.PrjSNO">返回</a>
+    <input type="button" id="sss" value="儲存" class="btn btn-default" onclick="check_form();" />
+</form>
+
+@section scripts {
+<script>
+
+    function check_form() {
+        //document.forms[0].submit();
+        save();
+    }
+
+    function save() {
+        
+        var formData = new FormData($('#form1')[0]);
+        $.ajax({
+            type: "post",
+            url: "../Att/Manual",
+            data: formData,
+            contentType: false, //for 檔案上傳
+            cache: false,       //for 檔案上傳
+            processData: false, //for 檔案上傳
+            async: true,
+            success: function (response) {
+                alert(response.msg);
+                location.reload();
+            },
+            complete: function () {
+
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    }
+
+</script>
+}

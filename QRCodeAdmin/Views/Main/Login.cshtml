@@ -1,0 +1,61 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "建築履歷登入頁";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+</head>
+<body>
+<form id="form1">
+<div class="container body-content">
+<div class="jumbotron" style="text-align: center">
+    <h2>@ViewBag.Title</h2>	
+    <p class="lead">員工編號 <input type="text" id="acc" name="acc" /></p>
+    <p><a class="btn btn-primary btn-lg" href="javascript:;" onclick="check_form()">送出</a></p>
+    
+</div>
+</div>
+</form>
+</body>
+</html>
+
+<script>
+
+
+    function check_form() {
+        submit_form();
+    }
+
+    function submit_form() {
+
+        var formData = new FormData($('#form1')[0]);
+        $.ajax({
+            type: "post",
+            url: "../Main/Login",
+            data: formData,
+            dataType: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                //alert(response.msg);
+                location.href = response.url;
+            },
+            complete: function () {
+                //alert("complete");
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    }
+
+</script>

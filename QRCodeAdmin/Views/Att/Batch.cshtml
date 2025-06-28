@@ -1,0 +1,142 @@
+﻿@model  Models.AllVM
+@{
+    ViewBag.Title = "整批檔案上傳";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<form id="form1" action="../Att/Batch" method="post" enctype="multipart/form-data">
+    <h2>@Model.PrjInfo.PrjName (@Model.PrjInfo.PrjCode) @ViewBag.Title</h2>
+    <div>1. 檔名重覆則覆蓋舊檔</div>
+    <div>2. 檔名請依照此格式，專案代號_戶號_中文字.pdf，交屋手冊戶號請使用000，舉例如下：</div>
+    @foreach(Models.SysCode sInfo in Model.AttTitles)
+    {
+        string item = "";
+        if (sInfo.Code == "a")
+        {
+            item = Model.PrjInfo.PrjCode + "_000_" + sInfo.Text + ".pdf";
+        }
+        else
+        {
+            item = Model.PrjInfo.PrjCode + "_01A_" + sInfo.Text + ".pdf";
+        }
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;@item</div>
+    }
+    <!--<div>3. 所有檔案上傳總量限制30M</div>-->
+
+    <input class="form-control" type="file" id="postedFiles" name="postedFiles" multiple="multiple" />
+
+    <input type="hidden" id="PrjCode" name="PrjCode" value="@Model.PrjInfo.PrjCode" />
+    <input type="hidden" id="PrjSNO" name="PrjSNO" value="@Model.PrjInfo.PrjSNO" />
+    <a class="btn btn-default" href="../Hou/List?PrjSNO=@Model.PrjInfo.PrjSNO">返回</a>
+    <input type="button" value="儲存" class="btn btn-default" onclick="check_form()" />
+
+    <br />
+    <h2>已上傳檔案</h2>
+    @{ 
+
+        string bdiv = "<div style='float:left>";
+        string ediv = "</div>";
+        int i = 0;
+        foreach (FileInfo file in Model.files)
+        {
+            if (i % 50 == 0)
+            {
+                Html.Raw(@bdiv);
+            }
+            <div><b>@file.Name</b>&emsp;@file.CreationTime&emsp;<a href="javascript:;" onclick="del('@Model.PrjInfo.PrjSNO', '@Model.PrjInfo.PrjCode', '@file.Name')" title="刪除">X</a></div>
+            if (i % 50 == 0)
+            {
+                Html.Raw(@ediv);
+                }
+            }
+                i++;
+        }
+
+
+    <div id="dialog-message" title="上傳結果說明 (關閉對話框前，請自行保存文字)"></div>
+
+</form>
+
+@section scripts {
+
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://jqueryui.com/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+<script>
+
+    function check_form() {
+        //document.forms[0].submit();
+        save();
+    }
+
+    function save() {
+        var formData = new FormData($('#form1')[0]);
+        $.ajax({
+            type: "post",
+            url: "../Att/Batch",
+            data: formData,
+            contentType: false, //for 檔案上傳
+            cache: false,       //for 檔案上傳
+            processData: false, //for 檔案上傳
+            async: true,
+            success: function (response) {
+
+                $("#dialog-message").html(response.err);
+
+
+
+                $("#dialog-message").dialog({
+                    width: 600,
+                    modal: true,
+                    buttons: {
+                        Ok: function () {
+                            $(this).dialog("close");
+                            location.href = response.url;
+                        }
+                    }
+                });
+
+
+
+                //location.href = response.url;
+            },
+            complete: function () {
+
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    }
+
+    function del(PrjSNO, PrjCode, AttFileName) {
+        if (confirm("確認刪除")) {
+
+            $.ajax({
+                type: "get",
+                url: "../Att/Del?PrjSNO=" + PrjSNO + "&PrjCode=" + PrjCode + "&AttFileName=" + AttFileName,
+                data: false,
+                contentType: false,
+                cache: false,
+                processData: false,
+                async: true,
+                success: function (response) {
+                    alert(response.msg);
+                    location.href = response.url;
+                },
+                complete: function () {
+
+                },
+                error: function () {
+                    alert("error");
+                }
+            });
+        }
+    }
+</script>
+}

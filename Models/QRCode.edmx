@@ -1,0 +1,260 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="QRCodeModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Attachs">
+          <Key>
+            <PropertyRef Name="AttSNO" />
+          </Key>
+          <Property Name="AttSNO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PrjSNO" Type="int" />
+          <Property Name="HouSNO" Type="int" />
+          <Property Name="AttCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="AttFileName" Type="nvarchar" MaxLength="100" />
+          <Property Name="AttNote" Type="nvarchar" MaxLength="100" />
+          <Property Name="AttSort" Type="int" />
+          <Property Name="AttTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="House">
+          <Key>
+            <PropertyRef Name="HouSNO" />
+          </Key>
+          <Property Name="HouSNO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PrjSNO" Type="int" />
+          <Property Name="PrjCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="HouCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="HouPWD" Type="nvarchar" MaxLength="50" />
+          <Property Name="QRCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="Token" Type="nvarchar" MaxLength="100" />
+          <Property Name="Limited" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="PrjSNO" />
+          </Key>
+          <Property Name="PrjSNO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PrjCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="PrjName" Type="nvarchar" MaxLength="50" />
+          <Property Name="PrjWelcome" Type="nvarchar" MaxLength="200" />
+          <Property Name="PrjFontColor" Type="nvarchar" MaxLength="50" />
+          <Property Name="PrjBgColor" Type="nvarchar" MaxLength="50" />
+          <Property Name="PrjLogo" Type="nvarchar" MaxLength="50" />
+          <Property Name="PrjPic" Type="nvarchar" MaxLength="50" />
+          <Property Name="PrjBannerColor" Type="nvarchar" MaxLength="50" />
+          <Property Name="PrjButFtColor" Type="nvarchar" MaxLength="50" />
+          <Property Name="PrjButBgColor" Type="nvarchar" MaxLength="50" />
+          <Property Name="Limited" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="SysCode">
+          <Key>
+            <PropertyRef Name="SysType" />
+            <PropertyRef Name="Value" />
+          </Key>
+          <Property Name="SysType" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Value" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Text" Type="nvarchar" MaxLength="500" />
+          <Property Name="Code" Type="nvarchar" MaxLength="50" />
+          <Property Name="Sort" Type="int" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="SNO" />
+          </Key>
+          <Property Name="SNO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GID" Type="nvarchar" MaxLength="50" />
+          <Property Name="PWD" Type="nvarchar" MaxLength="50" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="UnitCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="Roles" Type="nvarchar" MaxLength="50" />
+          <Property Name="Enabled" Type="int" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityContainer Name="QRCodeModelStoreContainer">
+          <EntitySet Name="Attachs" EntityType="Self.Attachs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="House" EntityType="Self.House" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Project" EntityType="Self.Project" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SysCode" EntityType="Self.SysCode" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="QRCodeModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="SysCode">
+          <Key>
+            <PropertyRef Name="SysType" />
+            <PropertyRef Name="Value" />
+          </Key>
+          <Property Name="SysType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Value" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Text" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Sort" Type="Int32" />
+        </EntityType>
+        <EntityContainer Name="QRCodeEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="SysCode" EntityType="Self.SysCode" />
+          <EntitySet Name="Users" EntityType="QRCodeModel.Users" />
+          <EntitySet Name="Attachs" EntityType="QRCodeModel.Attachs" />
+          <EntitySet Name="House" EntityType="QRCodeModel.House" />
+          <EntitySet Name="Project" EntityType="QRCodeModel.Project" />
+        </EntityContainer>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="SNO" />
+          </Key>
+          <Property Name="SNO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PWD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UnitCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Roles" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Enabled" Type="Int32" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Attachs">
+          <Key>
+            <PropertyRef Name="AttSNO" />
+          </Key>
+          <Property Name="AttSNO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PrjSNO" Type="Int32" />
+          <Property Name="HouSNO" Type="Int32" />
+          <Property Name="AttCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AttFileName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AttNote" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AttSort" Type="Int32" />
+          <Property Name="AttTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="House">
+          <Key>
+            <PropertyRef Name="HouSNO" />
+          </Key>
+          <Property Name="HouSNO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PrjSNO" Type="Int32" />
+          <Property Name="PrjCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HouCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HouPWD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="QRCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Token" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Limited" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="PrjSNO" />
+          </Key>
+          <Property Name="PrjSNO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PrjCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PrjName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PrjWelcome" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PrjFontColor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PrjBgColor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PrjLogo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PrjPic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PrjBannerColor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PrjButFtColor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PrjButBgColor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Limited" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="QRCodeModelStoreContainer" CdmEntityContainer="QRCodeEntities">
+          <EntitySetMapping Name="SysCode">
+            <EntityTypeMapping TypeName="QRCodeModel.SysCode">
+              <MappingFragment StoreEntitySet="SysCode">
+                <ScalarProperty Name="SysType" ColumnName="SysType" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Sort" ColumnName="Sort" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="QRCodeModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="Roles" ColumnName="Roles" />
+                <ScalarProperty Name="UnitCode" ColumnName="UnitCode" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PWD" ColumnName="PWD" />
+                <ScalarProperty Name="GID" ColumnName="GID" />
+                <ScalarProperty Name="SNO" ColumnName="SNO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Attachs">
+            <EntityTypeMapping TypeName="QRCodeModel.Attachs">
+              <MappingFragment StoreEntitySet="Attachs">
+                <ScalarProperty Name="AttTime" ColumnName="AttTime" />
+                <ScalarProperty Name="AttSort" ColumnName="AttSort" />
+                <ScalarProperty Name="AttNote" ColumnName="AttNote" />
+                <ScalarProperty Name="AttFileName" ColumnName="AttFileName" />
+                <ScalarProperty Name="AttCode" ColumnName="AttCode" />
+                <ScalarProperty Name="HouSNO" ColumnName="HouSNO" />
+                <ScalarProperty Name="PrjSNO" ColumnName="PrjSNO" />
+                <ScalarProperty Name="AttSNO" ColumnName="AttSNO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="House">
+            <EntityTypeMapping TypeName="QRCodeModel.House">
+              <MappingFragment StoreEntitySet="House">
+                <ScalarProperty Name="Limited" ColumnName="Limited" />
+                <ScalarProperty Name="Token" ColumnName="Token" />
+                <ScalarProperty Name="QRCode" ColumnName="QRCode" />
+                <ScalarProperty Name="HouPWD" ColumnName="HouPWD" />
+                <ScalarProperty Name="HouCode" ColumnName="HouCode" />
+                <ScalarProperty Name="PrjCode" ColumnName="PrjCode" />
+                <ScalarProperty Name="PrjSNO" ColumnName="PrjSNO" />
+                <ScalarProperty Name="HouSNO" ColumnName="HouSNO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Project">
+            <EntityTypeMapping TypeName="QRCodeModel.Project">
+              <MappingFragment StoreEntitySet="Project">
+                <ScalarProperty Name="Limited" ColumnName="Limited" />
+                <ScalarProperty Name="PrjButBgColor" ColumnName="PrjButBgColor" />
+                <ScalarProperty Name="PrjButFtColor" ColumnName="PrjButFtColor" />
+                <ScalarProperty Name="PrjBannerColor" ColumnName="PrjBannerColor" />
+                <ScalarProperty Name="PrjPic" ColumnName="PrjPic" />
+                <ScalarProperty Name="PrjLogo" ColumnName="PrjLogo" />
+                <ScalarProperty Name="PrjBgColor" ColumnName="PrjBgColor" />
+                <ScalarProperty Name="PrjFontColor" ColumnName="PrjFontColor" />
+                <ScalarProperty Name="PrjWelcome" ColumnName="PrjWelcome" />
+                <ScalarProperty Name="PrjName" ColumnName="PrjName" />
+                <ScalarProperty Name="PrjCode" ColumnName="PrjCode" />
+                <ScalarProperty Name="PrjSNO" ColumnName="PrjSNO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="無" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

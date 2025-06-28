@@ -1,0 +1,109 @@
+﻿@model Models.AllVM
+@{
+    Layout = null;
+    ViewBag.Title = "建築履歷/預覽";
+
+}
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style>
+            .logo {
+                float: left;
+                position: relative;
+                top: 10px;
+                left: 10px;
+                width: 100px;
+            }
+        .t1 {
+            float: left;
+            color: @Model.HouInfo.PrjFontColor;
+            /*font-size: 20px;*/
+            /*position: relative;*/
+            /*top: 100px;*/
+            /*left: 100px;*/
+        }
+
+
+    </style>
+</head>
+
+<body style="padding:0 0 0 0; background-color:@Model.HouInfo.PrjBgColor">
+
+<div class="navbar navbar-inverse navbar-fixed-top" style=" background-color: @Model.HouInfo.PrjBannerColor">
+<div class="container">
+    <div class="navbar-brand" style="height: 100px;width:220px; background-image: url(../Pic/@Model.HouInfo.PrjCode/@Model.HouInfo.PrjLogo);">
+    </div>
+
+    <div class="navbar-header">
+    <!--
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+    
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    </button>
+    -->
+    </div>
+
+    <div class="navbar-collapse collapse"></div>
+</div>
+</div>
+
+<div class="container body-content">
+
+    <div class="jumbotron" style="height: 900px; margin-top: 100px; background-image: url(../Pic/@Model.HouInfo.PrjCode/@Model.HouInfo.PrjPic ); color: @Model.HouInfo.PrjFontColor;">
+        <h2>建築履歷</h2>
+        <p class="lead"><h3>@Html.Raw(Model.HouInfo.PrjWelcome.Replace("\n", "<br>"))</h3></p>
+        <p class="lead"><h4>@Model.HouInfo.HouCode 住戶您好，請點選下方按鈕開啟附件</h4></p>
+
+
+        <p>
+            @{
+                foreach (var info in Model.AttProList)
+                {
+                    string pdf = Server.MapPath("/Upload/" + Model.HouInfo.PrjCode + "/" + info.AttFileName);
+                    string href = "";
+                    if (System.IO.File.Exists(pdf))
+                    {
+                        href = "/Upload/" + Model.HouInfo.PrjCode + "/" + info.AttFileName;
+                    }
+
+                    <div>
+                    <!--<a class="btn btn-primary btn-lg" href="../Pdfjs/Web/viewer.html?file=/Upload/@Model.HouInfo.PrjCode/@info.AttFileName" target="_blank" style="width: 330px; margin:0px 5px 5px 5px; text-align:left; color:@Model.HouInfo.PrjButFtColor; background-color:@Model.HouInfo.PrjButBgColor">-->
+                    @if (href == "")
+                    {
+                        <div class="btn btn-primary btn-lg" style="width: 330px; margin:0px 5px 5px 5px; text-align:left; color:@Model.HouInfo.PrjButFtColor; background-color:@Model.HouInfo.PrjButBgColor">
+                            @(info.AttTitle.Length >= 17 ? info.AttTitle.Substring(0, 17) : info.AttTitle)<br>@(info.AttNote.Length == 0 ? "" : "(" + info.AttNote + ")")
+                        </div>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary btn-lg" href="@href" target="_blank" style="width: 330px; margin:0px 5px 5px 5px; text-align:left; color:@Model.HouInfo.PrjButFtColor; background-color:@Model.HouInfo.PrjButBgColor">
+                            @(info.AttTitle.Length >= 17 ? info.AttTitle.Substring(0, 17) : info.AttTitle)<br>@(info.AttNote.Length == 0 ? "" : "(" + info.AttNote + ")")
+                        </a>
+                    }
+                    </div>
+                }
+            }
+        </p>
+
+    </div>
+
+
+    <footer>
+    <p></p>
+    </footer>
+</div>
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+
+</body>
+</html>
