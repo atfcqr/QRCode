@@ -24,7 +24,9 @@ namespace QRCodeAdmin.Controllers
 
         public ActionResult List()
         {
-            AAD_SignIn();
+            if (Session["Name"] == null)
+                AAD_SignIn();
+
             if (Session["Name"] == null)
                 Response.Redirect("../Main/Logout");
 

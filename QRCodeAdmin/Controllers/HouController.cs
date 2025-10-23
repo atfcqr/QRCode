@@ -168,6 +168,8 @@ namespace QRCodeAdmin.Controllers
             sql += "and ss.SysType = '顯示項目' ";
             if (vm.HouInfo.PrjCode == "1180B") //鐫月
                 sql += "and (ss.Code not in ('e')) ";
+            if (vm.HouInfo.PrjCode == "1190G") //鐫萃
+                sql += "and (ss.Code not in ('b')) ";
             sql += "order by ss.Sort ";
             cmd = db.GetSqlStringCommand(sql);
             using (dr = db.ExecuteReader(cmd))

@@ -91,10 +91,26 @@ namespace QRCodeAdmin.Controllers
         [HttpPost]
         public ActionResult Edit(FormCollection fc)
         {
+
+            
+            
             QRCodeEntities dbq = new QRCodeEntities();
             Users uInfo = new Users();
             if (int.Parse(fc["SNO"]) == 0)
             {
+                string gid = fc["GID"].ToString().Trim();
+                string email = fc["Email"].ToString().Trim().ToLower();
+                if (dbq.Users.Where(x => x.GID == gid).ToList().Count() > 0)
+                {
+                    Jsn err = new Jsn() { msg = "無法新增！工號已存在", url = "javascript:void();" };
+                    return Json(err, JsonRequestBehavior.AllowGet);
+                }
+                if (dbq.Users.Where(x => x.Email.ToLower() == email).ToList().Count() > 0)
+                {
+                    Jsn err = new Jsn() { msg = "無法新增！Email已存在", url = "javascript:void();" };
+                    return Json(err, JsonRequestBehavior.AllowGet);
+                }
+
                 uInfo.Name = fc["Name"].ToString().Trim();
                 uInfo.GID = fc["GID"].ToString().Trim();
                 uInfo.UnitCode = fc["UnitCode"].ToString().Trim();
