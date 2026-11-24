@@ -50,6 +50,10 @@
             info = new Models.AttPro();
         }
         AttTitle = Model.AttTitles.Where(x => x.Code == "b").FirstOrDefault().Text;
+        if (Model.HouInfo.HouCode == "豐蒔客戶")
+        {
+           AttTitle = Model.AttTitles.Where(x => x.Code == "h").FirstOrDefault().Text;
+        }
     }
     <tr>
     <td>2<input type="hidden" id="AttSNO02" name="AttSNO02" value="@info.AttSNO" /></td>
@@ -71,6 +75,10 @@
             info = new Models.AttPro();
         }
         AttTitle = Model.AttTitles.Where(x => x.Code == "c").FirstOrDefault().Text;
+        if (Model.HouInfo.HouCode == "豐蒔客戶")
+        {
+           AttTitle = Model.AttTitles.Where(x => x.Code == "i").FirstOrDefault().Text;
+        }
     }
     <tr>
     <td>3<input type="hidden" id="AttSNO03" name="AttSNO03" value="@info.AttSNO" /></td>
@@ -89,6 +97,10 @@
             info = new Models.AttPro();
         }
         AttTitle = Model.AttTitles.Where(x => x.Code == "d").FirstOrDefault().Text;
+        if (Model.HouInfo.HouCode == "豐蒔客戶")
+        {
+           AttTitle = Model.AttTitles.Where(x => x.Code == "j").FirstOrDefault().Text;
+        }
     }
     <tr>
     <td>4<input type="hidden" id="AttSNO04" name="AttSNO04" value="@info.AttSNO" /></td>
@@ -107,6 +119,10 @@
             info = new Models.AttPro();
         }
         AttTitle = Model.AttTitles.Where(x => x.Code == "e").FirstOrDefault().Text;
+        if (Model.HouInfo.HouCode == "豐蒔客戶")
+        {
+           AttTitle = Model.AttTitles.Where(x => x.Code == "k").FirstOrDefault().Text;
+        }
     }
     <tr>
     <td>5<input type="hidden" id="AttSNO05" name="AttSNO05" value="@info.AttSNO" /></td>
@@ -125,6 +141,10 @@
             info = new Models.AttPro();
         }
         AttTitle = Model.AttTitles.Where(x => x.Code == "f").FirstOrDefault().Text;
+        if (Model.HouInfo.HouCode == "豐蒔客戶")
+        {
+           AttTitle = Model.AttTitles.Where(x => x.Code == "l").FirstOrDefault().Text;
+        }
     }
     <tr>
     <td>6<input type="hidden" id="AttSNO06" name="AttSNO06" value="@info.AttSNO" /></td>
@@ -143,6 +163,10 @@
             info = new Models.AttPro();
         }
         AttTitle = Model.AttTitles.Where(x => x.Code == "g").FirstOrDefault().Text;
+        if (Model.HouInfo.HouCode == "豐蒔客戶")
+        {
+           AttTitle = Model.AttTitles.Where(x => x.Code == "m").FirstOrDefault().Text;
+        }
     }
     <tr>
     <td>7<input type="hidden" id="AttSNO07" name="AttSNO07" value="@info.AttSNO" /></td>

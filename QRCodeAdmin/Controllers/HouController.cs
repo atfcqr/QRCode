@@ -166,10 +166,16 @@ namespace QRCodeAdmin.Controllers
             sql += ") aa on ss.Code = aa.AttCode ";
             sql += "where 0 = 0 ";
             sql += "and ss.SysType = '顯示項目' ";
+            
             if (vm.HouInfo.PrjCode == "1180B") //鐫月
-                sql += "and (ss.Code not in ('e')) ";
-            if (vm.HouInfo.PrjCode == "1190G") //鐫萃
-                sql += "and (ss.Code not in ('b')) ";
+                sql += "and (ss.Code in ('a', 'b', 'c', 'd', 'f', 'g')) ";
+            else if (vm.HouInfo.PrjCode == "1190G") //鐫萃
+                sql += "and (ss.Code in ('a', 'c', 'd', 'e', 'f', 'g')) ";
+            else if (vm.HouInfo.PrjCode == "1170C" && vm.HouInfo.HouCode == "豐蒔客戶") //豐蒔
+                sql += "and (ss.Code in ('a', 'h', 'i', 'j', 'k', 'l', 'm')) ";
+            else
+                sql += "and (ss.Code in ('a', 'c', 'd', 'e', 'f', 'g')) ";
+
             sql += "order by ss.Sort ";
             cmd = db.GetSqlStringCommand(sql);
             using (dr = db.ExecuteReader(cmd))

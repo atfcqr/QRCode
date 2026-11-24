@@ -25,7 +25,7 @@ namespace QRCodeAdmin.Controllers
     public class MainController : BaseController
     {
         [HttpGet]
-        public ActionResult Login()
+ㄆ        public ActionResult Login()
         {
             return View();
             
